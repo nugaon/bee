@@ -43,11 +43,10 @@ var (
 	nnLowWatermark       = 2 // the number of peers in consecutive deepest bins that constitute as nearest neighbours
 	quickSaturationPeers = 4
 	saturationPeers      = 8
-	// overSaturationPeers         = 20
-	// bootNodeOverSaturationPeers = 20
-	shortRetry       = 30 * time.Second
-	timeToRetry      = 2 * shortRetry
-	broadcastBinSize = 4
+	shortRetry           = 30 * time.Second
+	timeToRetry          = 2 * shortRetry
+	broadcastBinSize     = 4
+	maxFirstbin          = float64(50)
 )
 
 var (
@@ -123,6 +122,8 @@ func New(
 	o Options,
 ) (*Kad, error) {
 
+	start := time.Now()
+
 	if o.OverSaturationCalc == nil {
 		o.OverSaturationCalc = defaultOverSaturationCalc
 	}
@@ -133,10 +134,6 @@ func New(
 		o.BitSuffixLength = defaultBitSuffixLength
 	}
 
-	for i := 0; i < int(swarm.MaxBins); i++ {
-	}
-
-	start := time.Now()
 	imc, err := im.NewCollector(metricsDB)
 	if err != nil {
 		return nil, err
@@ -184,7 +181,7 @@ func New(
 // produces oversaturation values using an exponential decay formula, sequence is as follows:
 // bin 0 -> 50, 44, 39, 34, 30, 27
 func defaultOverSaturationCalc(bin uint8) int {
-	return int(math.Round(50 * math.Exp(-float64(bin)/8.0)))
+	return int(math.Round(maxFirstbin * math.Exp(-float64(bin)/8.0)))
 }
 
 type peerConnInfo struct {
