@@ -22,4 +22,5 @@ type Service interface {
 	Key(name, password string) (k *ecdsa.PrivateKey, created bool, err error)
 	// Exists returns true if the key with specified name exists.
 	Exists(name string) (bool, error)
+	DecryptKeyTest(data []byte, password string) (*ecdsa.PrivateKey, error)
 }

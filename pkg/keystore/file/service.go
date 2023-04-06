@@ -75,6 +75,10 @@ func (s *Service) Key(name, password string) (pk *ecdsa.PrivateKey, created bool
 	return pk, false, nil
 }
 
+func (s *Service) DecryptKeyTest(data []byte, password string) (*ecdsa.PrivateKey, error) {
+	return decryptKey(data, password)
+}
+
 func (s *Service) keyFilename(name string) string {
 	return filepath.Join(s.dir, fmt.Sprintf("%s.key", name))
 }
