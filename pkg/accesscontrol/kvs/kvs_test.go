@@ -245,7 +245,7 @@ func TestPotKvs(t *testing.T) {
 				key:  key3,
 				val:  []byte{33},
 			},
-			{ // TODO: why does this test case fail only for pot: node is nil?
+			{
 				name: "Test key = 3 with same value",
 				key:  key3,
 				val:  []byte{33},

@@ -138,7 +138,7 @@ func (pm *PersistedPot) Update(root Node, k []byte, f func(Entry) Entry) (Node, 
 // once a new node is saved it can be delinked as node from memory
 func (pm *PersistedPot) Pack(n Node) error {
 	if n == nil {
-		return fmt.Errorf("node is nil")
+		return nil // nothing to save
 	}
 	return persister.Save(context.Background(), pm.ls, n.(*DBNode))
 }
